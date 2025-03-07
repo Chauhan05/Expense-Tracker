@@ -19,10 +19,12 @@ fun BottomNavigationBar(navController: NavController, modifier: Modifier = Modif
             NavigationBarItem(
                 selected = backStackEntry.value?.destination?.route == item.route,
                 onClick = {
-                    navController.navigate(item.route) {
-                        popUpTo(navController.graph.startDestinationId) { inclusive = false }
-                        launchSingleTop = true
-                        restoreState = true
+                    if (backStackEntry.value?.destination?.route != item.route) {  // Prevent reloading the same screen
+                        navController.navigate(item.route) {
+                            popUpTo(navController.graph.startDestinationId) { inclusive = false }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
                 },
                 icon = {

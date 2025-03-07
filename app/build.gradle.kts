@@ -78,4 +78,13 @@ dependencies {
     implementation (libs.material3) // or the latest version
     implementation (libs.ui.tooling.preview) // or the latest version
     implementation (libs.androidx.room.ktx)
+    implementation ("com.google.accompanist:accompanist-navigation-animation:0.33.2-alpha")
+    val nav_version = "2.8.6"
+
+    implementation("androidx.navigation:navigation-compose:$nav_version")
+
+//    For view Model
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
 }

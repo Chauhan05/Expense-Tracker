@@ -1,5 +1,6 @@
 package com.example.expensetracker.model
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -31,23 +32,25 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
 
 
     fun calIncomeExpense(value: List<Transaction>) = viewModelScope.launch {
-        withContext(Dispatchers.Default){
+        withContext(Dispatchers.Default) {
             var income = 0
             var expense = 0
             value.forEach { transaction ->
-                when(transaction.type) {
-                   TransactionType.INCOME -> {
-                      income += transaction.amount
-                   }
-                   TransactionType.EXPENSE -> {
-                       expense += transaction.amount
-                   }
-               }
+                when (transaction.type) {
+                    TransactionType.INCOME -> {
+                        income += transaction.amount
+                    }
+
+                    TransactionType.EXPENSE -> {
+                        expense += transaction.amount
+                    }
+                }
             }
             _income = income
             _expense = expense
         }
     }
+
     fun delete(id: Int) = viewModelScope.launch {
         withContext(Dispatchers.IO) {
             repository.deleteData(id)
@@ -120,11 +123,12 @@ class TransactionViewModel(private val repository: TransactionRepository) : View
 
     val netIncome: Int get() = _income - _expense
 
-    fun clearData(){
-        _money=0
-        _description=""
-        _category=""
-        _date=""
+    fun clearData() {
+        _money = 0
+        _description = ""
+        _category = ""
+        _date = ""
+        Log.d("clear","value ${if (_date=="") "cleared" else "not cleared"}")
     }
 //    private var _datePickerController by mutableStateOf(false)
 //    val datePickerController:Boolean get()=_datePickerController

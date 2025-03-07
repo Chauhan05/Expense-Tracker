@@ -15,10 +15,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.StrokeJoin
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -47,23 +53,80 @@ import com.example.expensetracker.database.TransactionRepository
 import com.example.expensetracker.model.TransactionViewModel
 
 @Composable
-fun Statistics(
+fun FinancialReport(
     navController: NavController,
     modifier: Modifier = Modifier,
     transactionViewModel: TransactionViewModel
 ) {
-    var selectedTab by remember { mutableStateOf("Expense") }
+//    var selectedTab by remember { mutableStateOf("Expense") }
+    var selectedTabIndex by remember {
+        mutableStateOf(0)
+    }
+    val tabItems = listOf("Expense", "Income")
+    val pagerState = rememberPagerState {
+        tabItems.size
+    }
+    val transactions by transactionViewModel.getAllItems.observeAsState(emptyList())
+    LaunchedEffect(selectedTabIndex) {
+        pagerState.animateScrollToPage(selectedTabIndex)
+    }
+    LaunchedEffect(pagerState.currentPage) {
+//        if (!pagerState.isScrollInProgress) {
+        selectedTabIndex = pagerState.currentPage
+//        }
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(Color(0xFFFFE0BD).copy(alpha = 0.2f))
     ) {
-        DescBar("Financial Report",navController)
-        ExpenseIncomeTab(selectedTab){
-            selectedTab=it
+        DescBar("Financial Report", navController)
+//        ExpenseIncomeTab(selectedTab) {
+//            selectedTab = it
+//        }
+        TabRow(
+            selectedTabIndex = selectedTabIndex
+        ) {
+            tabItems.forEachIndexed { index, item ->
+                Tab(
+                    selected = selectedTabIndex == index,
+                    onClick = {
+                        selectedTabIndex = index
+                    },
+                    text = {
+                        Text(item)
+                    }
+                )
+            }
         }
-        Spacer(modifier=Modifier.height(16.dp))
-        ShowTransaction(selectedTab,transactionViewModel.getAllItems.observeAsState().value ?: emptyList())
+
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+        ) { index ->
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Spacer(modifier = Modifier.height(16.dp))
+                ShowTransaction(
+//            selectedTab,
+                    if (selectedTabIndex == 0) tabItems[0] else tabItems[1],
+                    transactions.filter {
+                        if (index == 0) it.type == TransactionType.EXPENSE else it.type == TransactionType.INCOME
+                    }
+                )
+            }
+        }
+
+//        Spacer(modifier = Modifier.height(16.dp))
+//        ShowTransaction(
+////            selectedTab,
+//            if(selectedTabIndex==0) tabItems[0] else tabItems[1],
+//            transactionViewModel.getAllItems.observeAsState().value ?: emptyList()
+//        )
 
 //        ChartCirclePie(
 //            charts = listOf(
@@ -77,16 +140,10 @@ fun Statistics(
 
 @Composable
 fun ShowTransaction(selectedTab: String, transactions: List<Transaction>) {
-    val transList=if(selectedTab=="Income") transactions.filter {
-        it.type==TransactionType.INCOME
-    }
-    else transactions.filter {
-        it.type==TransactionType.EXPENSE
-    }
-    LazyColumn (
-        modifier=Modifier.fillMaxSize()
-    ){
-        items(transList){
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(transactions) {
             ListItem(it)
         }
 
@@ -153,7 +210,7 @@ fun ListItem(data: Transaction, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun ListItemPreview() {
-    ListItem(Transaction(1,TransactionType.INCOME,"Bills","Shopping",100,"abc"))
+    ListItem(Transaction(1, TransactionType.INCOME, "Bills", "Shopping", 100, "abc"))
 }
 
 @Composable
@@ -174,10 +231,9 @@ fun ExpenseIncomeTab(selectedTab: String, onTabSelected: (String) -> Unit) {
                     .clip(RoundedCornerShape(16.dp))
                     .background(
                         if (isSelected) {
-                            if(tab=="Income")Color.Green
+                            if (tab == "Income") Color.Green
                             else Color.Red
-                        }
-                        else Color(0xFFF3F5F8)
+                        } else Color(0xFFF3F5F8)
                     )
                     .clickable { onTabSelected(tab) }
                     .padding(vertical = 8.dp),
@@ -231,10 +287,16 @@ private fun ChartCirclePie(
     )
 }
 
+data class TabItem(
+    val title: String,
+    val unselectedIcon: ImageVector
+)
+
+
 @Preview(showSystemUi = true)
 @Composable
 private fun StatisticsPreview() {
-    Statistics(
+    FinancialReport(
         rememberNavController(), transactionViewModel = TransactionViewModel(
             TransactionRepository(
                 TransactionDatabase.getDatabase(context = LocalContext.current).transactionDao()
