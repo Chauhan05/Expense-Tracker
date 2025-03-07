@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,14 +34,14 @@ fun DatePickerDocked(transactionViewModel: TransactionViewModel) {
     val datePickerState = rememberDatePickerState()
 
     // Format the selected date to display in the text field
-    val selectedDate = transactionViewModel.date.ifEmpty {
-        datePickerState.selectedDateMillis?.let {
-            convertMillisToDate(it)
-        } ?: ""
-    }
+//    val selectedDate = transactionViewModel.date.ifEmpty {
+//        datePickerState.selectedDateMillis?.let {
+//            convertMillisToDate(it)
+//        } ?: ""
+//    }
 
     OutlinedTextField(
-        value = selectedDate,
+        value = transactionViewModel.date,
         onValueChange = { },
         label = { Text("Date") },
         readOnly = true,
@@ -62,6 +63,7 @@ fun DatePickerDocked(transactionViewModel: TransactionViewModel) {
             onDismissRequest = { showDatePicker = false },
             confirmButton = {
                 TextButton(onClick = {
+
                     transactionViewModel.changeDate(
                         datePickerState.selectedDateMillis?.let { convertMillisToDate(it) } ?: ""
                     )

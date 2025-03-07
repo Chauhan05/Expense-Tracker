@@ -1,7 +1,9 @@
 package com.example.expensetracker.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBalance
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.Circle
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MonetizationOn
@@ -21,7 +23,7 @@ sealed class BottomNavItem(
     )
     data object Transaction:BottomNavItem(
         NavigationItem.Transaction.route,
-        Icons.Default.MonetizationOn,
+        Icons.Default.AccountBalance,
         NavigationItem.Transaction.title
     )
     data object Add:BottomNavItem(
@@ -29,10 +31,10 @@ sealed class BottomNavItem(
         Icons.Default.Add,
         NavigationItem.Add.title
     )
-    data object Statistics:BottomNavItem(
-        NavigationItem.Statistics.route,
-        Icons.Default.Circle,
-        NavigationItem.Statistics.title
+    data object FinancialReport:BottomNavItem(
+        NavigationItem.FinancialReport.route,
+        Icons.Default.BarChart,
+        NavigationItem.FinancialReport.title
     )
     data object Profile:BottomNavItem(
         NavigationItem.Profile.route,
@@ -44,6 +46,6 @@ val bottomNavItems = listOf(
     BottomNavItem.Home,
     BottomNavItem.Transaction,
     BottomNavItem.Add,
-    BottomNavItem.Statistics,
+    BottomNavItem.FinancialReport,
     BottomNavItem.Profile
 )
