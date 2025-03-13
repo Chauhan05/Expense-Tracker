@@ -19,7 +19,6 @@ import com.example.expensetracker.model.TransactionViewModel
 import com.example.expensetracker.ui.theme.ExpenseTrackerTheme
 import com.example.expensetracker.ui_components.BottomNavigationBar
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 
@@ -52,7 +51,8 @@ class MainActivity : ComponentActivity() {
                     )
                 )
             )
-            val allItems by transactionViewModel.getAllItems.observeAsState(initial = emptyList())
+//            val transactionViewModel: TransactionViewModel= viewModel()
+            val allItems by transactionViewModel.allItemsLiveData.observeAsState(initial = emptyList())
 
             LaunchedEffect(allItems) {
                 transactionViewModel.calIncomeExpense(allItems)

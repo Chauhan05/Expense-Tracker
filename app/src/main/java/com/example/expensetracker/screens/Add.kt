@@ -17,7 +17,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -200,7 +199,7 @@ fun checkValidData(transactionViewModel: TransactionViewModel): String {
         if(type==TransactionType.EXPENSE && transactionViewModel.money>transactionViewModel.netIncome){
             return "Insufficient Balance"
         }
-        transactionViewModel.insert(Transaction(0, type, category, description, money, date))
+        transactionViewModel.insert(Transaction(0, type.transactionCode, category, description, money, date))
 //        if (type == TransactionType.INCOME) {
 //            transactionViewModel.increaseIncome(money)
 //        } else {

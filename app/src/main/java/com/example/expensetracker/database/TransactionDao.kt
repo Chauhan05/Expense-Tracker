@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.example.expensetracker.data.TransactionType
 
 @Dao
 interface TransactionDao {
@@ -16,6 +15,12 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transaction_table ORDER BY id DESC")
     fun getAllData(): LiveData<List<Transaction>>
+
+    @Query("SELECT * FROM transaction_table WHERE category = :type")
+    fun getAllIncome(type: Int): LiveData<List<Transaction>>
+
+    @Query("SELECT * FROM transaction_table WHERE category = :type")
+    fun getAllExpense(type: String = "EXPENSE"): LiveData<List<Transaction>>
 
 
 

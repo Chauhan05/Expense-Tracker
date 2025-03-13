@@ -59,26 +59,26 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation (libs.androidx.navigation.compose)
-    implementation( libs.androidx.material.icons.extended)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.material.icons.extended)
 
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
 
     ksp(libs.androidx.room.compiler)
-    implementation (libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     // LiveData
-    implementation (libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
 
     // Compose integration for ViewModel
-    implementation (libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation (libs.ui) // Replace with the latest version
-    implementation (libs.material3) // or the latest version
-    implementation (libs.ui.tooling.preview) // or the latest version
-    implementation (libs.androidx.room.ktx)
-    implementation ("com.google.accompanist:accompanist-navigation-animation:0.33.2-alpha")
+    implementation(libs.ui) // Replace with the latest version
+    implementation(libs.material3) // or the latest version
+    implementation(libs.ui.tooling.preview) // or the latest version
+    implementation(libs.androidx.room.ktx)
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.33.2-alpha")
     val nav_version = "2.8.6"
 
     implementation("androidx.navigation:navigation-compose:$nav_version")
@@ -86,5 +86,10 @@ dependencies {
 //    For view Model
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
+
+
+    implementation("com.google.accompanist:accompanist-flowlayout:0.33.2-alpha")
+
 
 }
