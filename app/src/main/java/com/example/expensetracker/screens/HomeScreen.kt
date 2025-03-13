@@ -120,7 +120,7 @@ fun RecentTransaction(transactionViewModel: TransactionViewModel, navController:
 //        Text("View All", fontSize = 20.sp)
     }
     TransactionListHomeScreen(
-        transactionViewModel.getAllItems.observeAsState().value ?: emptyList()
+        transactionViewModel.allItemsLiveData.observeAsState().value ?: emptyList()
     )
 
 //    TransactionItem(Icons.Default.ArrowDownward,"15000","Income")
@@ -138,7 +138,7 @@ fun TransactionListHomeScreen(
             TransactionItem(
                 amount = transaction.amount.toString(),
                 title = transaction.category,
-                type = transaction.type,
+                type = if(transaction.type==0) TransactionType.INCOME else TransactionType.EXPENSE ,
             )
         }
     }

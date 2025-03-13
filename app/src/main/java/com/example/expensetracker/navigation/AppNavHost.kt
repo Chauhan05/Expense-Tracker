@@ -225,13 +225,6 @@
 //}
 
 
-
-
-
-
-
-
-
 //@OptIn(ExperimentalAnimationApi::class)
 //@Composable
 //fun AppNavHost(
@@ -284,27 +277,34 @@
 //}
 
 
-import androidx.compose.animation.*
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
 import com.example.expensetracker.model.TransactionViewModel
 import com.example.expensetracker.navigation.NavigationItem
-import com.example.expensetracker.screens.*
+import com.example.expensetracker.screens.Add
+import com.example.expensetracker.screens.FinancialReport
+import com.example.expensetracker.screens.HomeScreen
+import com.example.expensetracker.screens.Profile
+import com.example.expensetracker.screens.Transaction
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppNavHost(
-    navController:NavHostController,
+    navController: NavHostController,
     modifier: Modifier = Modifier,
     transactionViewModel: TransactionViewModel
 ) {
 
-    val transactions by transactionViewModel.getAllItems.observeAsState(initial = emptyList())
+//    val transactions by transactionViewModel.getAllTransactionWithFilter(
+//        "Transfer",
+//        SortOrder.DEFAULT
+//    ).observeAsState(initial = emptyList())
 
     AnimatedNavHost(
         navController = navController,
@@ -322,7 +322,9 @@ fun AppNavHost(
             enterTransition = { fadeIn() },
             exitTransition = { fadeOut() }
         ) {
-            Transaction(navController, transactions, modifier)
+            Transaction(
+                navController, transactionViewModel, modifier, transactionViewModel.showBottomSheet,
+            ) { transactionViewModel.toggleBottomSheet() }
         }
         composable(
             route = NavigationItem.Add.route,

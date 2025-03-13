@@ -66,7 +66,7 @@ fun FinancialReport(
     val pagerState = rememberPagerState {
         tabItems.size
     }
-    val transactions by transactionViewModel.getAllItems.observeAsState(emptyList())
+    val transactions by transactionViewModel.allItemsLiveData.observeAsState(emptyList())
     LaunchedEffect(selectedTabIndex) {
         pagerState.animateScrollToPage(selectedTabIndex)
     }
@@ -115,7 +115,7 @@ fun FinancialReport(
 //            selectedTab,
                     if (selectedTabIndex == 0) tabItems[0] else tabItems[1],
                     transactions.filter {
-                        if (index == 0) it.type == TransactionType.EXPENSE else it.type == TransactionType.INCOME
+                        if (index == 0) it.type == TransactionType.EXPENSE.transactionCode else it.type == TransactionType.INCOME.transactionCode
                     }
                 )
             }
@@ -175,8 +175,8 @@ fun ListItem(data: Transaction, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.End
         ) {
             Text(
-                if (data.type == TransactionType.INCOME) "+" + data.amount.toString() else "-" + data.amount.toString(),
-                color = if (data.type == TransactionType.INCOME) Color.Green else Color.Red,
+                if (data.type == TransactionType.INCOME.transactionCode) "+" + data.amount.toString() else "-" + data.amount.toString(),
+                color = if (data.type == TransactionType.INCOME.transactionCode) Color.Green else Color.Red,
                 fontSize = 22.sp,
                 maxLines = 1
             )
@@ -210,7 +210,7 @@ fun ListItem(data: Transaction, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun ListItemPreview() {
-    ListItem(Transaction(1, TransactionType.INCOME, "Bills", "Shopping", 100, "abc"))
+    ListItem(Transaction(1, TransactionType.INCOME.transactionCode, "Bills", "Shopping", 100, "abc"))
 }
 
 @Composable

@@ -8,7 +8,7 @@ import com.example.expensetracker.data.TransactionType
 data class Transaction(
     @PrimaryKey(autoGenerate = true)
     val id:Int,
-    val type: TransactionType,
+    val type: Int,
     val category: String,
     val description: String,
     val amount: Int,
